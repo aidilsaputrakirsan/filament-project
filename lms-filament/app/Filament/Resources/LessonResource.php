@@ -28,9 +28,12 @@ class LessonResource extends Resource
                     ->maxLength(255),
                 Forms\Components\Textarea::make('content')
                     ->columnSpanFull(),
-                Forms\Components\TextInput::make('course_id')
+                Forms\Components\Select::make('course_id')
+                    ->label('Kursus')
+                    ->relationship('course', 'title')
                     ->required()
-                    ->numeric(),
+                    ->preload()
+                    ->searchable(),
                 Forms\Components\TextInput::make('order')
                     ->required()
                     ->numeric()

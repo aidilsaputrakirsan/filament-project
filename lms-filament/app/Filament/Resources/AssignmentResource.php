@@ -29,9 +29,12 @@ class AssignmentResource extends Resource
                 Forms\Components\Textarea::make('description')
                     ->required()
                     ->columnSpanFull(),
-                Forms\Components\TextInput::make('course_id')
+                Forms\Components\Select::make('course_id')
+                    ->label('Kursus')
+                    ->relationship('course', 'title')
                     ->required()
-                    ->numeric(),
+                    ->preload()
+                    ->searchable(),
                 Forms\Components\DateTimePicker::make('due_date'),
                 Forms\Components\TextInput::make('max_score')
                     ->required()
