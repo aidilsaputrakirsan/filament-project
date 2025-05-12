@@ -1,4 +1,5 @@
 <?php
+// app/Models/Submission.php
 
 namespace App\Models;
 
@@ -13,6 +14,7 @@ class Submission extends Model
         'assignment_id',
         'user_id',
         'content',
+        'file_path',
         'score',
         'feedback',
     ];

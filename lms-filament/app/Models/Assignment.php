@@ -1,4 +1,5 @@
 <?php
+// app/Models/Assignment.php
 
 namespace App\Models;
 
@@ -9,23 +10,24 @@ class Assignment extends Model
 {
     use HasFactory;
 
-    // Tambahkan semua kolom yang bisa diisi secara massal ke sini
     protected $fillable = [
         'title',
         'description',
         'course_id',
         'due_date',
         'max_score',
-        // tambahkan kolom lain yang perlu mass-assignment
+        'attachment',
     ];
 
-    // Relasi dengan kursus
+    protected $casts = [
+        'due_date' => 'datetime',
+    ];
+
     public function course()
     {
         return $this->belongsTo(Course::class);
     }
 
-    // Relasi dengan submission
     public function submissions()
     {
         return $this->hasMany(Submission::class);

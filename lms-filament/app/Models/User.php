@@ -1,4 +1,5 @@
 <?php
+// app/Models/User.php
 
 namespace App\Models;
 
@@ -34,8 +35,25 @@ class User extends Authenticatable implements FilamentUser
 
     public function canAccessPanel(Panel $panel): bool
     {
-        // Hanya user dengan role admin atau teacher yang bisa akses panel
-          return true;
+        // Untuk sementara semua user bisa akses panel
+        // Di masa depan bisa diubah menjadi:
+        // return in_array($this->role, ['admin', 'teacher']);
+        return true;
+    }
+
+    public function isAdmin(): bool
+    {
+        return $this->role === 'admin';
+    }
+
+    public function isTeacher(): bool
+    {
+        return $this->role === 'teacher';
+    }
+
+    public function isStudent(): bool
+    {
+        return $this->role === 'student';
     }
 
     public function courses()
@@ -56,5 +74,15 @@ class User extends Authenticatable implements FilamentUser
     public function submissions()
     {
         return $this->hasMany(Submission::class);
+    }
+
+    public function attendances()
+    {
+        return $this->hasMany(Attendance::class);
+    }
+
+    public function quizAttempts()
+    {
+        return $this->hasMany(QuizAttempt::class);
     }
 }
