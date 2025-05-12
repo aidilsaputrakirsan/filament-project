@@ -11,6 +11,8 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Auth;
 
 class QuizResource extends Resource
 {
@@ -35,7 +37,15 @@ class QuizResource extends Resource
                     
                 Forms\Components\Select::make('course_id')
                     ->label('Mata Kuliah')
-                    ->relationship('course', 'title')
+                    ->relationship('course', 'title', function (Builder $query) {
+                        // Admin dapat memilih semua kursus
+                        if (Auth::user()->isAdmin()) {
+                            return $query;
+                        }
+                        
+                        // Dosen hanya dapat memilih kursus yang dibuat olehnya
+                        return $query->where('user_id', Auth::id());
+                    })
                     ->required()
                     ->searchable(),
                     
@@ -118,7 +128,15 @@ class QuizResource extends Resource
             ->filters([
                 Tables\Filters\SelectFilter::make('course_id')
                     ->label('Mata Kuliah')
-                    ->relationship('course', 'title'),
+                    ->relationship('course', 'title', function (Builder $query) {
+                        // Admin dapat memilih semua kursus
+                        if (Auth::user()->isAdmin()) {
+                            return $query;
+                        }
+                        
+                        // Dosen hanya dapat memilih kursus yang dibuat olehnya
+                        return $query->where('user_id', Auth::id());
+                    }),
                     
                 Tables\Filters\SelectFilter::make('quiz_type')
                     ->label('Jenis')
@@ -140,6 +158,25 @@ class QuizResource extends Resource
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ]);
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        $query = parent::getEloquentQuery();
+        
+        // Admin dapat melihat semua kuis
+        if (Auth::user()->isAdmin()) {
+            return $query;
+        }
+        
+        // Dosen hanya dapat melihat kuis untuk kursus yang dibuat olehnya
+        if (Auth::user()->isTeacher()) {
+            return $query->whereHas('course', function (Builder $query) {
+                $query->where('user_id', Auth::id());
+            });
+        }
+        
+        return $query;
     }
 
     public static function getRelations(): array

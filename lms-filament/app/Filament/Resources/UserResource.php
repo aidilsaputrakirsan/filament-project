@@ -11,12 +11,19 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 
 class UserResource extends Resource
 {
     protected static ?string $model = User::class;
     protected static ?string $navigationIcon = 'heroicon-o-user';
     protected static ?string $navigationGroup = 'Manajemen Pengguna';
+
+    // Hanya admin yang bisa mengakses manajemen user
+    public static function canAccess(): bool
+    {
+        return Auth::user()->isAdmin();
+    }
 
     public static function form(Form $form): Form
     {
@@ -84,7 +91,8 @@ class UserResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
+                Tables\Actions\DeleteAction::make()
+                    ->visible(fn (User $record) => $record->id !== Auth::id()), // Tidak bisa hapus diri sendiri
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

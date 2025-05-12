@@ -13,6 +13,7 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Auth;
 
 class AttendanceResource extends Resource
 {
@@ -27,7 +28,15 @@ class AttendanceResource extends Resource
             ->schema([
                 Forms\Components\Select::make('course_id')
                     ->label('Mata Kuliah')
-                    ->options(Course::all()->pluck('title', 'id'))
+                    ->options(function () {
+                        // Admin dapat memilih semua kursus
+                        if (Auth::user()->isAdmin()) {
+                            return Course::all()->pluck('title', 'id');
+                        }
+                        
+                        // Dosen hanya dapat memilih kursus yang dibuat olehnya
+                        return Course::where('user_id', Auth::id())->pluck('title', 'id');
+                    })
                     ->required()
                     ->searchable()
                     ->reactive()
@@ -113,7 +122,15 @@ class AttendanceResource extends Resource
             ->filters([
                 Tables\Filters\SelectFilter::make('course_id')
                     ->label('Mata Kuliah')
-                    ->options(Course::all()->pluck('title', 'id'))
+                    ->options(function () {
+                        // Admin dapat memilih semua kursus
+                        if (Auth::user()->isAdmin()) {
+                            return Course::all()->pluck('title', 'id');
+                        }
+                        
+                        // Dosen hanya dapat memilih kursus yang dibuat olehnya
+                        return Course::where('user_id', Auth::id())->pluck('title', 'id');
+                    })
                     ->searchable(),
                     
                 Tables\Filters\SelectFilter::make('status')
@@ -153,6 +170,25 @@ class AttendanceResource extends Resource
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ]);
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        $query = parent::getEloquentQuery();
+        
+        // Admin dapat melihat semua presensi
+        if (Auth::user()->isAdmin()) {
+            return $query;
+        }
+        
+        // Dosen hanya dapat melihat presensi untuk kursus yang dibuat olehnya
+        if (Auth::user()->isTeacher()) {
+            return $query->whereHas('course', function (Builder $query) {
+                $query->where('user_id', Auth::id());
+            });
+        }
+        
+        return $query;
     }
 
     public static function getRelations(): array
