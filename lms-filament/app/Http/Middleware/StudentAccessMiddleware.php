@@ -12,8 +12,10 @@ class StudentAccessMiddleware
 {
     public function handle(Request $request, Closure $next): Response
     {
-        if (Auth::check() && Auth::user()->isStudent()) {
-            return redirect()->route('filament.admin.pages.access-denied');
+        // Hanya redirect siswa, izinkan admin dan guru
+        if (Auth::check() && Auth::user()->role === 'student') {
+            // Gunakan access-denied route daripada redirect ke route yang mungkin belum didefinisikan
+            return redirect('/admin/access-denied');
         }
 
         return $next($request);

@@ -1,0 +1,1 @@
+Get-ChildItem -Recurse | Where-Object { $_.FullName -notlike "*\node_modules*" -and $_.FullName -notlike "*\vendor*" } | ForEach-Object { $_.FullName.Substring($_.FullName.IndexOf('lms-filament')) }
