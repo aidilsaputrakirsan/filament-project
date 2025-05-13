@@ -10,7 +10,7 @@ class Kernel extends HttpKernel
     // ...
 
     protected $middlewareAliases = [
-        // ...
-        'student.access' => \App\Http\Middleware\StudentAccessMiddleware::class,
+        'student.access' => \App\Http\Middleware\StudentAccessMiddleware::class,  
+        'role' => \App\Http\Middleware\CheckRole::class,
     ];
 }
