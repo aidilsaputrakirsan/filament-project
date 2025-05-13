@@ -4,18 +4,18 @@
     <x-slot name="header">{{ $quiz->title }} - Pengerjaan</x-slot>
     
     <div class="space-y-6">
-        <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm rounded-lg">
+        <div class="bg-white overflow-hidden shadow-sm rounded-lg">
             <div class="p-6">
                 <div class="flex justify-between items-center">
-                    <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100">Informasi Kuis</h3>
+                    <h3 class="text-lg font-medium text-gray-900">Informasi Kuis</h3>
                     
-                    <div class="bg-gray-100 dark:bg-gray-700 py-2 px-4 rounded-lg text-gray-700 dark:text-gray-300 font-medium">
+                    <div class="bg-gray-100 py-2 px-4 rounded-lg text-gray-700 font-medium">
                         Sisa Waktu: <span id="timer" class="font-bold">{{ gmdate('H:i:s', max(0, $timeLeft)) }}</span>
                     </div>
                 </div>
                 
                 <div class="mt-2">
-                    <p class="text-sm text-gray-600 dark:text-gray-400">
+                    <p class="text-sm text-gray-600">
                         Jumlah Soal: {{ $questions->count() }}
                     </p>
                 </div>
@@ -25,19 +25,19 @@
         <form id="quizForm" action="{{ route('student.quizzes.submit', $attempt) }}" method="POST">
             @csrf
             
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm rounded-lg mb-6">
+            <div class="bg-white overflow-hidden shadow-sm rounded-lg mb-6">
                 <div class="p-6">
                     <div class="flex justify-between items-center mb-4">
-                        <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100">Navigasi Soal</h3>
+                        <h3 class="text-lg font-medium text-gray-900">Navigasi Soal</h3>
                     </div>
                     
                     <div class="flex flex-wrap gap-2">
                         @foreach($questions as $index => $navQuestion)
                             <button type="button" class="question-nav-btn w-10 h-10 flex items-center justify-center rounded-md border 
                                 @if(isset($answers[$navQuestion->id])) 
-                                    bg-green-100 dark:bg-green-800 border-green-500 dark:border-green-600 text-green-800 dark:text-green-200
+                                    bg-green-100 border-green-500 text-green-800
                                 @else
-                                    bg-gray-100 dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300
+                                    bg-gray-100 border-gray-300 text-gray-700
                                 @endif
                             " data-question-id="{{ $navQuestion->id }}">
                                 {{ $index + 1 }}
@@ -49,28 +49,28 @@
             
             <div id="questions-container">
                 @foreach($questions as $index => $question)
-                    <div class="question-container bg-white dark:bg-gray-800 overflow-hidden shadow-sm rounded-lg mb-6 {{ $index > 0 ? 'hidden' : '' }}" data-question-id="{{ $question->id }}">
+                    <div class="question-container bg-white overflow-hidden shadow-sm rounded-lg mb-6 {{ $index > 0 ? 'hidden' : '' }}" data-question-id="{{ $question->id }}">
                         <div class="p-6">
                             <div class="flex justify-between items-center mb-4">
-                                <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100">Soal {{ $index + 1 }}</h3>
-                                <div class="text-sm text-gray-500 dark:text-gray-400">
+                                <h3 class="text-lg font-medium text-gray-900">Soal {{ $index + 1 }}</h3>
+                                <div class="text-sm text-gray-500">
                                     {{ $index + 1 }} dari {{ $questions->count() }}
                                 </div>
                             </div>
                             
                             <div class="mb-6">
-                                <div class="prose dark:prose-invert max-w-none text-gray-700 dark:text-gray-300">
+                                <div class="prose max-w-none text-gray-700">
                                     {{ $question->question_text }}
                                 </div>
                             </div>
                             
                             <div class="mb-6">
                                 @if($question->question_type === 'essay')
-                                    <label for="answer-{{ $question->id }}" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Jawaban Anda:</label>
-                                    <textarea id="answer-{{ $question->id }}" class="w-full rounded-md border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 shadow-sm focus:border-amber-500 focus:ring focus:ring-amber-500 focus:ring-opacity-50" rows="5" data-question-id="{{ $question->id }}">{{ isset($answers[$question->id]) ? $answers[$question->id] : '' }}</textarea>
+                                    <label for="answer-{{ $question->id }}" class="block text-sm font-medium text-gray-700 mb-2">Jawaban Anda:</label>
+                                    <textarea id="answer-{{ $question->id }}" class="w-full rounded-md border-gray-300 shadow-sm focus:border-amber-500 focus:ring focus:ring-amber-500 focus:ring-opacity-50" rows="5" data-question-id="{{ $question->id }}">{{ isset($answers[$question->id]) ? $answers[$question->id] : '' }}</textarea>
                                 @else
                                     <fieldset>
-                                        <legend class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Pilih jawaban yang benar:</legend>
+                                        <legend class="text-sm font-medium text-gray-700 mb-2">Pilih jawaban yang benar:</legend>
                                         <div class="space-y-2">
                                             @foreach($question->options as $option)
                                                 <div class="flex items-center">
@@ -79,11 +79,11 @@
                                                         name="answer-{{ $question->id }}" 
                                                         type="radio" 
                                                         value="{{ $option->id }}"
-                                                        class="h-4 w-4 border-gray-300 dark:border-gray-700 text-amber-600 focus:ring-amber-500"
+                                                        class="h-4 w-4 border-gray-300 text-amber-600 focus:ring-amber-500"
                                                         data-question-id="{{ $question->id }}"
                                                         {{ isset($answers[$question->id]) && $answers[$question->id] == $option->id ? 'checked' : '' }}
                                                     >
-                                                    <label for="option-{{ $option->id }}" class="ml-3 block text-sm font-medium text-gray-700 dark:text-gray-300">
+                                                    <label for="option-{{ $option->id }}" class="ml-3 block text-sm font-medium text-gray-700">
                                                         {{ $option->option_text }}
                                                     </label>
                                                 </div>
@@ -113,9 +113,9 @@
                 @endforeach
             </div>
             
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm rounded-lg">
+            <div class="bg-white overflow-hidden shadow-sm rounded-lg">
                 <div class="p-6 flex justify-between items-center">
-                    <p class="text-sm text-gray-600 dark:text-gray-400">
+                    <p class="text-sm text-gray-600">
                         Total Soal Terjawab: <span id="answered-count">{{ count($answers) }}</span> dari {{ $questions->count() }}
                     </p>
                     

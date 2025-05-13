@@ -1,25 +1,25 @@
 <?php
-// routes/web.php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Middleware\CheckRole;
 
 Route::get('/', function () {
     return view('welcome');
 });
 
-// Arahkan setelah login ke halaman yang sesuai berdasarkan role
+// Definisi explicit untuk route dashboard
 Route::get('/dashboard', function () {
     if (auth()->check()) {
-        if (in_array(auth()->user()->role, ['admin', 'teacher'])) {
+        $user = auth()->user();
+        
+        if ($user->isAdmin() || $user->isTeacher()) {
             return redirect('/admin');
-        } else {
+        } else if ($user->isStudent()) {
             return redirect()->route('student.dashboard');
         }
     }
     
-    return redirect('/login');
-})->middleware(['auth'])->name('dashboard');
+    return redirect('/');
+})->middleware(['auth'])->name('dashboard'); // Pastikan ada nama 'dashboard' di sini
 
 require __DIR__.'/auth.php';
 require __DIR__.'/student.php';

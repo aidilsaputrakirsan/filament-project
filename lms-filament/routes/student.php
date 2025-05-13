@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth', 'role:student'])->name('student.')->group(function () {
     // Dashboard
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+       Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     
     // Courses
     Route::get('/courses', [CourseController::class, 'index'])->name('courses.index');

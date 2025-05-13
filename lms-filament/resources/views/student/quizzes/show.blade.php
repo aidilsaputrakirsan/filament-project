@@ -17,10 +17,10 @@
         @endif
         
         <!-- Quiz Details -->
-        <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm rounded-lg">
+        <div class="bg-white overflow-hidden shadow-sm rounded-lg">
             <div class="p-6">
                 <div class="mb-4">
-                    <a href="{{ route('student.quizzes.index') }}" class="text-amber-600 dark:text-amber-400 hover:underline flex items-center">
+                    <a href="{{ route('student.quizzes.index') }}" class="text-amber-600 hover:underline flex items-center">
                         <svg class="h-4 w-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
                         </svg>
@@ -29,9 +29,9 @@
                 </div>
                 
                 <div class="mb-4">
-                    <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100">Informasi Kuis</h3>
-                    <p class="text-sm text-gray-600 dark:text-gray-400 mt-2">Mata Kuliah: {{ $quiz->course->title }}</p>
-                    <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                    <h3 class="text-lg font-medium text-gray-900">Informasi Kuis</h3>
+                    <p class="text-sm text-gray-600 mt-2">Mata Kuliah: {{ $quiz->course->title }}</p>
+                    <p class="text-sm text-gray-600 mt-1">
                         Jenis: 
                         @if($quiz->quiz_type === 'pre_test')
                             Pre-Test
@@ -41,36 +41,36 @@
                             Kuis
                         @endif
                     </p>
-                    <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">Waktu Mulai: {{ $quiz->start_time->format('d M Y, H:i') }}</p>
-                    <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">Waktu Selesai: {{ $quiz->end_time->format('d M Y, H:i') }}</p>
-                    <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">Durasi: {{ $quiz->duration_minutes }} menit</p>
+                    <p class="text-sm text-gray-600 mt-1">Waktu Mulai: {{ $quiz->start_time->format('d M Y, H:i') }}</p>
+                    <p class="text-sm text-gray-600 mt-1">Waktu Selesai: {{ $quiz->end_time->format('d M Y, H:i') }}</p>
+                    <p class="text-sm text-gray-600 mt-1">Durasi: {{ $quiz->duration_minutes }} menit</p>
                 </div>
                 
                 <div class="mt-6">
-                    <h4 class="text-md font-medium text-gray-900 dark:text-gray-100 mb-2">Deskripsi</h4>
-                    <div class="text-gray-600 dark:text-gray-400 prose dark:prose-invert max-w-none">
+                    <h4 class="text-md font-medium text-gray-900 mb-2">Deskripsi</h4>
+                    <div class="text-gray-600 prose max-w-none">
                         {{ $quiz->description ?: 'Tidak ada deskripsi.' }}
                     </div>
                 </div>
                 
                 <div class="mt-6">
-                    <h4 class="text-md font-medium text-gray-900 dark:text-gray-100 mb-2">Status</h4>
+                    <h4 class="text-md font-medium text-gray-900 mb-2">Status</h4>
                     
                     @if($quiz->start_time > now())
-                        <div class="p-3 bg-yellow-100 dark:bg-yellow-800 rounded-md">
-                            <p class="text-yellow-800 dark:text-yellow-200">
+                        <div class="p-3 bg-yellow-100 rounded-md">
+                            <p class="text-yellow-800">
                                 Kuis ini belum dimulai. Anda dapat mengerjakan kuis ini mulai {{ $quiz->start_time->format('d M Y, H:i') }}.
                             </p>
                         </div>
                     @elseif($quiz->end_time < now())
-                        <div class="p-3 bg-red-100 dark:bg-red-800 rounded-md">
-                            <p class="text-red-800 dark:text-red-200">
+                        <div class="p-3 bg-red-100 rounded-md">
+                            <p class="text-red-800">
                                 Kuis ini telah berakhir pada {{ $quiz->end_time->format('d M Y, H:i') }}.
                             </p>
                         </div>
                     @else
-                        <div class="p-3 bg-green-100 dark:bg-green-800 rounded-md">
-                            <p class="text-green-800 dark:text-green-200">
+                        <div class="p-3 bg-green-100 rounded-md">
+                            <p class="text-green-800">
                                 Kuis ini sedang berlangsung dan akan berakhir pada {{ $quiz->end_time->format('d M Y, H:i') }}.
                             </p>
                         </div>
@@ -102,44 +102,44 @@
         
         <!-- Attempts -->
         @if($attempts->count() > 0)
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm rounded-lg">
+            <div class="bg-white overflow-hidden shadow-sm rounded-lg">
                 <div class="p-6">
-                    <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">Riwayat Upaya</h3>
+                    <h3 class="text-lg font-medium text-gray-900 mb-4">Riwayat Upaya</h3>
                     
                     <div class="overflow-x-auto">
-                        <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                            <thead class="bg-gray-50 dark:bg-gray-700">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-50">
                                 <tr>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">No</th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Waktu Mulai</th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Waktu Selesai</th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Status</th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Nilai</th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Aksi</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">No</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Waktu Mulai</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Waktu Selesai</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nilai</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
                                 </tr>
                             </thead>
-                            <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+                            <tbody class="bg-white divide-y divide-gray-200">
                                 @foreach($attempts as $index => $attempt)
                                     <tr>
                                         <td class="px-6 py-4 whitespace-nowrap">
-                                            <div class="text-sm text-gray-900 dark:text-white">{{ $index + 1 }}</div>
+                                            <div class="text-sm text-gray-900">{{ $index + 1 }}</div>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap">
-                                            <div class="text-sm text-gray-500 dark:text-gray-400">{{ $attempt->start_time->format('d M Y, H:i') }}</div>
+                                            <div class="text-sm text-gray-500">{{ $attempt->start_time->format('d M Y, H:i') }}</div>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap">
-                                            <div class="text-sm text-gray-500 dark:text-gray-400">
+                                            <div class="text-sm text-gray-500">
                                                 {{ $attempt->end_time ? $attempt->end_time->format('d M Y, H:i') : '-' }}
                                             </div>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap">
                                             <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
                                                 @if($attempt->status === 'completed') 
-                                                    bg-green-100 text-green-800 dark:bg-green-800 dark:text-green-100
+                                                    bg-green-100 text-green-800
                                                 @elseif($attempt->status === 'in_progress')
-                                                    bg-yellow-100 text-yellow-800 dark:bg-yellow-800 dark:text-yellow-100
+                                                    bg-yellow-100 text-yellow-800
                                                 @else
-                                                    bg-red-100 text-red-800 dark:bg-red-800 dark:text-red-100
+                                                    bg-red-100 text-red-800
                                                 @endif
                                             ">
                                                 @if($attempt->status === 'completed')
@@ -152,17 +152,17 @@
                                             </span>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap">
-                                            <div class="text-sm text-gray-900 dark:text-white">
+                                            <div class="text-sm text-gray-900">
                                                 {{ $attempt->score !== null ? number_format($attempt->score, 2) : '-' }}
                                             </div>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                             @if($attempt->status === 'in_progress')
-                                                <a href="{{ route('student.quizzes.attempt', $attempt) }}" class="text-amber-600 hover:text-amber-900 dark:text-amber-400 dark:hover:text-amber-300">
+                                                <a href="{{ route('student.quizzes.attempt', $attempt) }}" class="text-amber-600 hover:text-amber-900">
                                                     Lanjutkan
                                                 </a>
                                             @elseif($attempt->status === 'completed')
-                                                <a href="{{ route('student.quizzes.review', $attempt) }}" class="text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300">
+                                                <a href="{{ route('student.quizzes.review', $attempt) }}" class="text-blue-600 hover:text-blue-900">
                                                     Review
                                                 </a>
                                             @endif
