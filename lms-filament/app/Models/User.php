@@ -75,4 +75,19 @@ class User extends Authenticatable implements FilamentUser
     {
         $this->update(['language_preference' => $locale]);
     }
+
+    public function isAdmin(): bool
+    {
+        return $this->role === 'admin';
+    }
+
+    public function isTeacher(): bool
+    {
+        return $this->role === 'dosen';
+    }
+
+    public function isStudent(): bool
+    {
+        return $this->role === 'mahasiswa';
+    }
 }

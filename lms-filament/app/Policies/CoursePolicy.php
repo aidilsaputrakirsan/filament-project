@@ -3,7 +3,7 @@
 
 namespace App\Policies;
 
-use App\Models\Course;
+use App\Models\MataKuliah;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 

@@ -19,8 +19,7 @@ class Enrollment extends Model
         return $this->belongsTo(User::class);
     }
     
-    public function course()
-    {
-        return $this->belongsTo(Course::class);
+    public function mataKuliah() {
+        return $this->belongsTo(MataKuliah::class, 'course_id'); // Tetap gunakan course_id untuk backward compatibility
     }
 }

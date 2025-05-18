@@ -4,7 +4,7 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\CourseResource\Pages;
-use App\Models\Course;
+use App\Models\MataKuliah;
 use App\Models\User;
 use Filament\Forms;
 use Filament\Forms\Form;

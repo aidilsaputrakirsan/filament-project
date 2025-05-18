@@ -18,7 +18,7 @@ use Filament\Tables\Table;
 class ImportExportTemplateResource extends Resource
 {
     protected static ?string $model = ImportExportTemplate::class;
-    protected static ?string $navigationIcon = 'heroicon-o-document-arrow-up-down';
+    protected static ?string $navigationIcon = 'heroicon-o-document-arrow-down';
     protected static ?string $navigationGroup = 'Import/Export';
     protected static ?string $navigationLabel = 'Template';
 

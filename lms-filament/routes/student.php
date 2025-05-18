@@ -15,7 +15,7 @@ Route::middleware(['auth', \App\Http\Middleware\CheckRole::class.':student'])->n
     
     // Courses
     Route::get('/courses', [CourseController::class, 'index'])->name('courses.index');
-    Route::get('/courses/{course}', [CourseController::class, 'show'])->name('courses.show');
+    Route::get('/courses/{mataKuliah}', [CourseController::class, 'show'])->name('courses.show');
     Route::get('/courses/{course}/lessons/{lesson}', [CourseController::class, 'showLesson'])->name('courses.lesson');
     
     // Assignments
