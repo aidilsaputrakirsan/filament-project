@@ -9,14 +9,14 @@ use App\Http\Controllers\Student\QuizController;
 use App\Http\Controllers\Student\DashboardController;
 use Illuminate\Support\Facades\Route;
 
-Route::middleware(['auth', \App\Http\Middleware\CheckRole::class.':student'])->name('student.')->group(function () {
+Route::middleware(['auth', \App\Http\Middleware\CheckRole::class.':mahasiswa'])->name('student.')->group(function () {
     // Dashboard
        Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     
     // Courses
     Route::get('/courses', [CourseController::class, 'index'])->name('courses.index');
-    Route::get('/courses/{mataKuliah}', [CourseController::class, 'show'])->name('courses.show');
-    Route::get('/courses/{course}/lessons/{lesson}', [CourseController::class, 'showLesson'])->name('courses.lesson');
+    Route::get('/courses/{mataKuliah}', [CourseController::class, 'show'])->name('courses.show'); // Ubah parameter
+    Route::get('/courses/{mataKuliah}/lessons/{lesson}', [CourseController::class, 'showLesson'])->name('courses.lesson');
     
     // Assignments
     Route::get('/assignments', [AssignmentController::class, 'index'])->name('assignments.index');

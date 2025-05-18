@@ -1,6 +1,4 @@
 <?php
-// app/Models/Enrollment.php
-
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -12,7 +10,7 @@ class Enrollment extends Model
     
     protected $fillable = [
         'user_id',
-        'course_id',
+        'mata_kuliah_id', // Perubahan disini dari course_id
     ];
     
     public function user()
@@ -22,7 +20,7 @@ class Enrollment extends Model
     
     public function mataKuliah()
     {
-        return $this->belongsTo(MataKuliah::class, 'course_id');
+        return $this->belongsTo(MataKuliah::class, 'mata_kuliah_id');
     }
     
     // Alias untuk backward compatibility

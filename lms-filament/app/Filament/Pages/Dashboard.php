@@ -19,26 +19,8 @@ class Dashboard extends BaseDashboard
     protected static ?string $title = 'Dashboard';
     
     protected function getHeaderWidgets(): array
-    {
-        // Jika user adalah admin, tampilkan semua statistik
-        if (Auth::user()->isAdmin()) {
-            return [
-                \App\Filament\Widgets\CourseStats::class,
-                \App\Filament\Widgets\UpcomingAssignments::class,
-                \App\Filament\Widgets\RecentSubmissions::class,
-            ];
-        }
-        
-        // Jika user adalah dosen, tampilkan statistik khusus dosen
-        if (Auth::user()->isTeacher()) {
-            return [
-                \App\Filament\Widgets\CourseStats::class,
-                \App\Filament\Widgets\UpcomingAssignments::class,
-                \App\Filament\Widgets\RecentSubmissions::class,
-            ];
-        }
-        
-        // Jika user adalah mahasiswa, tampilkan pesan akses ditolak
-        return [];
-    }
+{
+    // Sementara tidak menampilkan widget sampai fitur lengkap
+    return [];
+}
 }

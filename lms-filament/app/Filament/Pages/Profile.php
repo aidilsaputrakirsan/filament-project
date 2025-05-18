@@ -1,6 +1,5 @@
 <?php
 
-// app/Filament/Pages/Profile.php
 namespace App\Filament\Pages;
 
 use App\Models\User;
@@ -29,6 +28,8 @@ class Profile extends Page
     public function mount(): void
     {
         $this->user = auth()->user();
+        
+        // Perbaikan: Pastikan menggunakan nama state yang konsisten
         $this->form->fill([
             'name' => $this->user->name,
             'email' => $this->user->email,
@@ -72,25 +73,28 @@ class Profile extends Page
                 TextInput::make('password')
                     ->password()
                     ->label('Password Baru (kosongkan jika tidak diubah)')
-                    ->dehydrated(false),
+                    ->dehydrated(fn ($state) => filled($state)),
                 
                 TextInput::make('password_confirmation')
                     ->password()
                     ->label('Konfirmasi Password Baru')
-                    ->dehydrated(false),
+                    ->dehydrated(fn ($state) => filled($state)),
             ]);
     }
 
     public function submit(): void
     {
+        // Dapatkan data dari form dan validasi
         $data = $this->form->getState();
         
+        // Perbarui data user
         $this->user->name = $data['name'];
         $this->user->email = $data['email'];
         $this->user->nim_nip = $data['nim_nip'];
         $this->user->profile_photo = $data['profile_photo'];
         $this->user->language_preference = $data['language_preference'];
         
+        // Perbarui password jika diisi
         if (!empty($data['password'])) {
             if ($data['password'] === $data['password_confirmation']) {
                 $this->user->password = Hash::make($data['password']);
@@ -103,8 +107,10 @@ class Profile extends Page
             }
         }
         
+        // Simpan perubahan
         $this->user->save();
         
+        // Tampilkan notifikasi
         Notification::make()
             ->title('Profil berhasil diperbarui')
             ->success()

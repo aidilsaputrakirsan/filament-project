@@ -1,7 +1,6 @@
 <?php
 namespace App\Filament\Resources;
 
-// app/Filament/Resources/MataKuliahResource.php
 use App\Filament\Resources\MataKuliahResource\Pages;
 use App\Models\MataKuliah;
 use App\Models\User;
@@ -49,7 +48,7 @@ class MataKuliahResource extends Resource
                     ->default(false),
             ]);
     }
-
+    
     public static function table(Table $table): Table
     {
         return $table

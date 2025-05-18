@@ -19,7 +19,7 @@ class MataKuliah extends Model
         'description',
         'thumbnail',
         'user_id',
-        'status',
+        'is_published',
         'start_date',
         'end_date',
     ];
@@ -27,6 +27,7 @@ class MataKuliah extends Model
     protected $casts = [
         'start_date' => 'date',
         'end_date' => 'date',
+        'is_published' => 'boolean',
     ];
 
     public function user(): BelongsTo

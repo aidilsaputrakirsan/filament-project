@@ -63,7 +63,7 @@ class User extends Authenticatable implements FilamentUser
     
     public function enrolledCourses(): BelongsToMany
     {
-        return $this->belongsToMany(MataKuliah::class, 'enrollments', 'user_id', 'course_id')
+        return $this->belongsToMany(MataKuliah::class, 'enrollments', 'user_id', 'mata_kuliah_id')
             ->withTimestamps()
             ->withPivot(['status', 'enrolled_at']);
     }

@@ -13,7 +13,7 @@ class Assignment extends Model
     protected $fillable = [
         'title',
         'description',
-        'course_id',
+        'mata_kuliah_id', // Ubah dari course_id
         'due_date',
         'max_score',
         'attachment',
@@ -25,7 +25,7 @@ class Assignment extends Model
 
     public function mataKuliah()
     {
-        return $this->belongsTo(MataKuliah::class, 'course_id');
+        return $this->belongsTo(MataKuliah::class, 'mata_kuliah_id');
     }
     
     // Alias untuk backward compatibility

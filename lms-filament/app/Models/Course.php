@@ -4,5 +4,6 @@ namespace App\Models;
 
 class Course extends MataKuliah
 {
-    // Kelas kosong yang mengextend MataKuliah untuk backward compatibility
+    // Untuk backward compatibility dengan kode yang sudah ada
+    // Tidak perlu mengubah property $table karena sudah diwariskan dari MataKuliah
 }

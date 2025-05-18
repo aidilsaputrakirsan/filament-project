@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Student;
 
 use App\Http\Controllers\Controller;
 use App\Models\Assignment;
-use App\Models\Course;
+use App\Models\MataKuliah;
 use App\Models\Enrollment;
 use App\Models\Quiz;
 use App\Models\Submission;
