@@ -1,9 +1,8 @@
 <?php
-// app/Filament/Resources/CourseResource.php
-
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\CourseResource\Pages;
+// app/Filament/Resources/MataKuliahResource.php
+use App\Filament\Resources\MataKuliahResource\Pages;
 use App\Models\MataKuliah;
 use App\Models\User;
 use Filament\Forms;
@@ -14,11 +13,14 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 
-class CourseResource extends Resource
+class MataKuliahResource extends Resource
 {
-    protected static ?string $model = Course::class;
+    protected static ?string $model = MataKuliah::class;
+    
     protected static ?string $navigationIcon = 'heroicon-o-academic-cap';
+    
     protected static ?string $navigationGroup = 'Akademik';
+    
     protected static ?string $navigationLabel = 'Mata Kuliah';
 
     public static function form(Form $form): Form
@@ -29,13 +31,17 @@ class CourseResource extends Resource
                     ->label('Judul')
                     ->required()
                     ->maxLength(255),
+                Forms\Components\TextInput::make('kode')
+                    ->label('Kode')
+                    ->required()
+                    ->maxLength(20),
                 Forms\Components\Textarea::make('description')
                     ->label('Deskripsi')
                     ->maxLength(65535)
                     ->columnSpanFull(),
                 Forms\Components\Select::make('user_id')
                     ->label('Pengajar')
-                    ->options(User::where('role', 'teacher')->pluck('name', 'id'))
+                    ->options(User::where('role', 'dosen')->pluck('name', 'id'))
                     ->required()
                     ->visible(fn () => Auth::user()->isAdmin()),
                 Forms\Components\Toggle::make('is_published')
@@ -50,6 +56,9 @@ class CourseResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('title')
                     ->label('Judul')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('kode')
+                    ->label('Kode')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('user.name')
                     ->label('Pengajar')
@@ -107,9 +116,9 @@ class CourseResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListCourses::route('/'),
-            'create' => Pages\CreateCourse::route('/create'),
-            'edit' => Pages\EditCourse::route('/{record}/edit'),
+            'index' => Pages\ListMataKuliah::route('/'),
+            'create' => Pages\CreateMataKuliah::route('/create'),
+            'edit' => Pages\EditMataKuliah::route('/{record}/edit'),
         ];
     }
 }

@@ -23,8 +23,15 @@ class Assignment extends Model
         'due_date' => 'datetime',
     ];
 
-    public function mataKuliah() {
-        return $this->belongsTo(MataKuliah::class, 'course_id'); // Tetap gunakan course_id untuk backward compatibility
+    public function mataKuliah()
+    {
+        return $this->belongsTo(MataKuliah::class, 'course_id');
+    }
+    
+    // Alias untuk backward compatibility
+    public function course()
+    {
+        return $this->mataKuliah();
     }
 
     public function submissions()

@@ -1,4 +1,5 @@
 <?php
+// app/Models/Enrollment.php
 
 namespace App\Models;
 
@@ -19,7 +20,14 @@ class Enrollment extends Model
         return $this->belongsTo(User::class);
     }
     
-    public function mataKuliah() {
-        return $this->belongsTo(MataKuliah::class, 'course_id'); // Tetap gunakan course_id untuk backward compatibility
+    public function mataKuliah()
+    {
+        return $this->belongsTo(MataKuliah::class, 'course_id');
+    }
+    
+    // Alias untuk backward compatibility
+    public function course()
+    {
+        return $this->mataKuliah();
     }
 }

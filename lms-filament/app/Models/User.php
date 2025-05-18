@@ -1,4 +1,5 @@
 <?php
+// app/Models/User.php
 
 namespace App\Models;
 
@@ -41,12 +42,18 @@ class User extends Authenticatable implements FilamentUser
         return in_array($this->role, ['admin', 'dosen']);
     }
     
-    public function courses()
+    public function mataKuliah()
     {
         if ($this->role === 'dosen') {
-            return $this->hasMany(Course::class);
+            return $this->hasMany(MataKuliah::class);
         }
         return null;
+    }
+    
+    // Alias untuk backward compatibility
+    public function courses()
+    {
+        return $this->mataKuliah();
     }
     
     public function enrollments(): HasMany
@@ -56,7 +63,7 @@ class User extends Authenticatable implements FilamentUser
     
     public function enrolledCourses(): BelongsToMany
     {
-        return $this->belongsToMany(Course::class, 'enrollments')
+        return $this->belongsToMany(MataKuliah::class, 'enrollments', 'user_id', 'course_id')
             ->withTimestamps()
             ->withPivot(['status', 'enrolled_at']);
     }

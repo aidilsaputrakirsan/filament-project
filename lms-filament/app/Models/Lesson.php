@@ -1,4 +1,5 @@
 <?php
+// app/Models/Lesson.php
 
 namespace App\Models;
 
@@ -16,8 +17,14 @@ class Lesson extends Model
         'order',
     ];
     
+    public function mataKuliah()
+    {
+        return $this->belongsTo(MataKuliah::class, 'course_id');
+    }
+    
+    // Alias untuk backward compatibility
     public function course()
     {
-        return $this->belongsTo(Course::class);
+        return $this->mataKuliah();
     }
 }
