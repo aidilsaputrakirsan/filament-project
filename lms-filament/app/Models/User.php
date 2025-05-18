@@ -1,86 +1,78 @@
 <?php
-// app/Models/User.php
 
 namespace App\Models;
 
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Panel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable implements FilamentUser
 {
-    use HasFactory, Notifiable;
-
+    use HasApiTokens, HasFactory, Notifiable;
+    
     protected $fillable = [
         'name',
         'email',
         'password',
         'role',
+        'nim_nip',
+        'profile_photo',
+        'language_preference',
     ];
-
+    
     protected $hidden = [
         'password',
         'remember_token',
     ];
-
-    protected function casts(): array
-    {
-        return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-        ];
-    }
-
+    
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+        'password' => 'hashed',
+    ];
+    
     public function canAccessPanel(Panel $panel): bool
     {
         // Hanya admin dan dosen yang bisa akses panel
-        return in_array($this->role, ['admin', 'teacher']);
+        return in_array($this->role, ['admin', 'dosen']);
     }
-
-    public function isAdmin(): bool
-    {
-        return $this->role === 'admin';
-    }
-
-    public function isTeacher(): bool
-    {
-        return $this->role === 'teacher';
-    }
-
-    public function isStudent(): bool
-    {
-        return $this->role === 'student';
-    }
-
+    
     public function courses()
     {
-        return $this->hasMany(Course::class);
+        if ($this->role === 'dosen') {
+            return $this->hasMany(Course::class);
+        }
+        return null;
     }
-
-    public function enrollments()
+    
+    public function enrollments(): HasMany
     {
         return $this->hasMany(Enrollment::class);
     }
-
-    public function enrolledCourses()
+    
+    public function enrolledCourses(): BelongsToMany
     {
-        return $this->belongsToMany(Course::class, 'enrollments');
+        return $this->belongsToMany(Course::class, 'enrollments')
+            ->withTimestamps()
+            ->withPivot(['status', 'enrolled_at']);
     }
-
-    public function submissions()
+    
+    public function submissions(): HasMany
     {
         return $this->hasMany(Submission::class);
     }
-
-    public function attendances()
+    
+    public function attendanceRecords(): HasMany
     {
-        return $this->hasMany(Attendance::class);
+        return $this->hasMany(AttendanceRecord::class);
     }
-
-    public function quizAttempts()
+    
+    public function setLanguagePreference(string $locale): void
     {
-        return $this->hasMany(QuizAttempt::class);
+        $this->update(['language_preference' => $locale]);
     }
 }

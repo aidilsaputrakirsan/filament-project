@@ -1,55 +1,76 @@
 <?php
 // app/Filament/Resources/UserResource.php
-
+// app/Filament/Resources/UserResource.php
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\UserResource\Pages;
 use App\Models\User;
 use Filament\Forms;
+use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Columns\ImageColumn;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Auth;
 
 class UserResource extends Resource
 {
     protected static ?string $model = User::class;
-    protected static ?string $navigationIcon = 'heroicon-o-user';
+    protected static ?string $navigationIcon = 'heroicon-o-users';
     protected static ?string $navigationGroup = 'Manajemen Pengguna';
-
-    // Hanya admin yang bisa mengakses manajemen user
-    public static function canAccess(): bool
-    {
-        return Auth::user()->isAdmin();
-    }
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('name')
+                TextInput::make('name')
                     ->required()
                     ->maxLength(255)
                     ->label('Nama'),
-                Forms\Components\TextInput::make('email')
+                    
+                TextInput::make('email')
                     ->email()
                     ->required()
                     ->maxLength(255),
-                Forms\Components\TextInput::make('password')
+                    
+                TextInput::make('nim_nip')
+                    ->label('NIM/NIP')
+                    ->maxLength(50),
+                    
+                Select::make('role')
+                    ->options([
+                        'admin' => 'Admin',
+                        'dosen' => 'Dosen',
+                        'mahasiswa' => 'Mahasiswa',
+                    ])
+                    ->required()
+                    ->label('Peran'),
+                    
+                FileUpload::make('profile_photo')
+                    ->image()
+                    ->directory('profile-photos')
+                    ->columnSpanFull()
+                    ->label('Foto Profil'),
+                    
+                Select::make('language_preference')
+                    ->options([
+                        'id' => 'Bahasa Indonesia',
+                        'en' => 'English',
+                    ])
+                    ->default('id')
+                    ->label('Preferensi Bahasa'),
+                    
+                TextInput::make('password')
                     ->password()
                     ->dehydrateStateUsing(fn ($state) => Hash::make($state))
                     ->dehydrated(fn ($state) => filled($state))
-                    ->required(fn (string $operation): bool => $operation === 'create'),
-                Forms\Components\Select::make('role')
-                    ->required()
-                    ->options([
-                        'admin' => 'Admin',
-                        'teacher' => 'Dosen',
-                        'student' => 'Mahasiswa',
-                    ])
-                    ->default('student'),
+                    ->required(fn (string $operation): bool => $operation === 'create')
+                    ->label('Password'),
             ]);
     }
 
@@ -57,42 +78,53 @@ class UserResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('name')
-                    ->label('Nama')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('email')
-                    ->searchable(),
-                Tables\Columns\BadgeColumn::make('role')
-                    ->label('Peran')
-                    ->colors([
-                        'primary' => 'student',
-                        'success' => 'teacher',
-                        'danger' => 'admin',
-                    ])
-                    ->formatStateUsing(fn (string $state): string => match ($state) {
-                        'admin' => 'Admin',
-                        'teacher' => 'Dosen',
-                        'student' => 'Mahasiswa',
-                        default => $state,
-                    }),
-                Tables\Columns\TextColumn::make('created_at')
-                    ->label('Terdaftar pada')
-                    ->dateTime()
+                ImageColumn::make('profile_photo')
+                    ->label('Foto'),
+                    
+                TextColumn::make('name')
+                    ->searchable()
+                    ->sortable()
+                    ->label('Nama'),
+                    
+                TextColumn::make('email')
+                    ->searchable()
                     ->sortable(),
+                    
+                TextColumn::make('nim_nip')
+                    ->searchable()
+                    ->label('NIM/NIP'),
+                    
+                TextColumn::make('role')
+                    ->badge()
+                    ->color(fn (string $state): string => match ($state) {
+                        'admin' => 'danger',
+                        'dosen' => 'warning',
+                        'mahasiswa' => 'success',
+                        default => 'gray',
+                    })
+                    ->label('Peran'),
+                    
+                TextColumn::make('language_preference')
+                    ->formatStateUsing(fn (string $state): string => $state === 'id' ? 'Indonesia' : 'English')
+                    ->label('Bahasa'),
+                    
+                TextColumn::make('created_at')
+                    ->dateTime()
+                    ->sortable()
+                    ->label('Dibuat'),
             ])
             ->filters([
-                Tables\Filters\SelectFilter::make('role')
+                SelectFilter::make('role')
                     ->options([
                         'admin' => 'Admin',
-                        'teacher' => 'Dosen',
-                        'student' => 'Mahasiswa',
+                        'dosen' => 'Dosen',
+                        'mahasiswa' => 'Mahasiswa',
                     ])
-                    ->label('Filter berdasarkan peran'),
+                    ->label('Peran'),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make()
-                    ->visible(fn (User $record) => $record->id !== Auth::id()), // Tidak bisa hapus diri sendiri
+                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
